@@ -1,12 +1,22 @@
 (function () {
     window.pspx = {
-        init: function ({ spaceid, isPreview }) {
+        init: function ({ spaceid, isPreview, env = 'prod' }) {
             if (!spaceid) {
                 throw new Error('missing space id');
             }
+
+            const urlBaseMap = {
+                prod: 'https://fjsu16onvd.execute-api.us-east-1.amazonaws.com/production/api/',
+                stage: 'https://4mxwytmbdh.execute-api.us-east-1.amazonaws.com/dev/api/',
+                dev: 'http://localhost:5000/api/',
+            };
+
+            const url = urlBaseMap[env] ?? urlBaseMap.dev;
+
             window
                 .fetch(
-                    'http://localhost:5000/api/styles/getconfig?spaceid=' +
+                    url +
+                        'styles/getconfig?spaceid=' +
                         spaceid +
                         '&isPreview=' +
                         isPreview
